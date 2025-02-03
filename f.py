@@ -23,7 +23,7 @@ from telegram import Bot
 import sys
 
 # Token bot Telegram
-TELEGRAM_BOT_TOKEN = '6764902068:AAEntjE5CO8v2iTn220ZdJvG07ERwlNAnRc'
+TELEGRAM_BOT_TOKEN = '8176672851:AAGhCRzD5C01wW8iYwJDhllCSfl1xO5XVm0'
 # ID grup atau pengguna yang akan menerima pesan
 TELEGRAM_CHAT_ID = '-4209220524'
 
